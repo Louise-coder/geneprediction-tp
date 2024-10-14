@@ -156,6 +156,17 @@ def has_shine_dalgarno(
     end_search = start - 6
     match_object = re_object.search(sequence, start_search, end_search)
     return bool(match_object)
+
+
+def predict_genes(
+    sequence: str,
+    start_regex: Pattern,
+    stop_regex: Pattern,
+    shine_regex: Pattern,
+    min_gene_len: int,
+    max_shine_dalgarno_distance: int,
+    min_gap: int,
+) -> List:
     """Predict most probable genes
 
     :param sequence: (str) Sequence from the genome.
@@ -167,10 +178,29 @@ def has_shine_dalgarno(
     :param min_gap: (int) Minimum distance between two genes.
     :return: (list) List of [start, stop] position of each predicted genes.
     """
-    pass
-
-
-def write_genes_pos(predicted_genes_file: Path, probable_genes: List[List[int]]) -> None:
+    current_pos = 0
+    predicted_genes = []
+    while len(sequence) - current_pos >= min_gap:
+        current_pos = find_start(
+            start_regex, sequence, current_pos, len(sequence)
+        )
+        if current_pos is None:
+            continue
+        stop = find_stop(stop_regex, sequence, current_pos)
+        if (stop is not None) and (stop - current_pos >= min_gene_len):
+            if has_shine_dalgarno(
+                shine_regex,
+                sequence,
+                current_pos,
+                max_shine_dalgarno_distance,
+            ):
+                predicted_genes.append([current_pos + 1, stop + 3])
+                current_pos = stop + 3 + min_gap
+            else:
+                current_pos += 1
+        else:
+            current_pos += 1
+    return predicted_genes
     """Write list of gene positions.
 
     :param predicted_genes_file: (Path) Output file of gene positions.
