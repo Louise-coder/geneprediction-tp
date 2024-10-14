@@ -126,7 +126,13 @@ def find_stop(
     :param start: (int) Start position of the research
     :return: (int) If exist, position of the stop codon. Otherwise None.
     """
-    pass
+    re_object = re.compile(stop_regex)
+    for i in range(start, len(sequence), 3):
+        codon = sequence[i : i + 3]
+        match_obj = re_object.search(codon)
+        if match_obj:
+            return i
+    return None
 
 
 def has_shine_dalgarno(
