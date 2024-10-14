@@ -3,7 +3,7 @@ import sys
 import os
 import csv
 import re
-import textwrap
+from textwrap import fill
 from re import Pattern
 from pathlib import Path
 from typing import List, Union, Optional
