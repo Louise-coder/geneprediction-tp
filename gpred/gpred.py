@@ -109,7 +109,11 @@ def find_start(
     :param stop: (int) Stop position of the research
     :return: (int) If exist, position of the start codon. Otherwise None.
     """
-    pass
+    re_object = re.compile(start_regex)
+    match_obj = re_object.search(sequence, start, stop)
+    if match_obj:
+        return match_obj.start(0)
+    return match_obj
 
 
 def find_stop(
