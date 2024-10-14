@@ -89,7 +89,13 @@ def read_fasta(fasta_file: Path) -> str:
     :param fasta_file: (Path) Path to the fasta file.
     :return: (str) Sequence from the genome.
     """
-    pass
+    seq = ""
+    with open(fasta_file, "r", encoding="utf-8") as file:
+        for line in file:
+            if line.startswith(">"):
+                continue
+            seq += line.strip()
+    return seq
 
 
 def find_start(
