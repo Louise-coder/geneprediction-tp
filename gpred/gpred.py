@@ -201,6 +201,11 @@ def predict_genes(
         else:
             current_pos += 1
     return predicted_genes
+
+
+def write_genes_pos(
+    predicted_genes_file: Path, probable_genes: List[List[int]]
+) -> None:
     """Write list of gene positions.
 
     :param predicted_genes_file: (Path) Output file of gene positions.
